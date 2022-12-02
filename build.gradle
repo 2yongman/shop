@@ -29,6 +29,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //thymeleaf layout dialect dependency
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    //스프링 시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 }
 
 tasks.named('test') {

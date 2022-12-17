@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "item_img")
+@Table(name = "item_img", schema = "shop")
 @Getter @Setter
 public class ItemImg extends BaseEntity{
     @Id

@@ -2,6 +2,7 @@ package com.shop.controller;
 
 import com.shop.dto.ItemFormDto;
 import com.shop.dto.ItemSearchDto;
+import com.shop.dto.MainItemDto;
 import com.shop.entity.Item;
 import com.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -119,4 +120,23 @@ public class ItemController {
                 return "item/itemMng";
     }
 
+    @GetMapping(value = "/")
+    public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model){
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto,pageable);
+        model.addAttribute("items", items);
+        model.addAttribute("itemSearchDto", itemSearchDto);
+        model.addAttribute("maxPage",5);
+        return "main";
+    }
+
+    @GetMapping(value = "item/{itemId}")
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        model.addAttribute("item", itemFormDto);
+        return "item/itemDtl";
+    }
+
 }
+
+//147페이지

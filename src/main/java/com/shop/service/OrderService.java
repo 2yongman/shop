@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class OrderService {
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn
                         //주문한 상품의 대표 이미지를 조회
-                        (orderItem.getItem().getId(), "Y");
+                                (orderItem.getItem().getId(), "Y");
                 OrderItemDto orderItemDto =
                         new OrderItemDto(orderItem, itemImg.getImgUrl());
                 orderHistDto.addOrderItemDto(orderItemDto);
@@ -77,6 +78,24 @@ public class OrderService {
 
         //페이지 구현 객체를 생성하여 반환
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validateOrder(Long orderId, String email) {
+        Member curMember = memberRepository.findByEmail(email);
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        Member member = order.getMember();
+
+        if (!StringUtils.equals(curMember.getEmail(), saveMember.getEmail())) {
+            return false;
+        }
+        return  false;
+    }
+
+    public void cancleOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        order.cancleOrder();
     }
 
 }
